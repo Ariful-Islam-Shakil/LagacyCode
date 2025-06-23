@@ -1,21 +1,20 @@
-from typing import Optional
-from tabulate import tabulate  # External package that must be installed
+from tabulate import tabulate  # External package, install with: pip install tabulate
 
-def add(a: int, b: int) -> int:
+def add(a, b):
     return a + b
 
-def subtract(a: int, b: int) -> int:
+def subtract(a, b):
     return a - b
 
-def multiply(a: int, b: int) -> int:
+def multiply(a, b):
     return a * b
 
-def divide(a: int, b: int) -> Optional[float]:
+def divide(a, b):
     if b == 0:
         raise ValueError("Cannot divide by zero!")
-    return a / b
+    return float(a) / b  # Ensure float division
 
-def display_results_as_table(a: int, b: int) -> None:
+def display_results_as_table(a, b):
     results = [
         ["Operation", "Result"],
         ["Addition", add(a, b)],
@@ -23,16 +22,16 @@ def display_results_as_table(a: int, b: int) -> None:
         ["Multiplication", multiply(a, b)],
         ["Division", divide(a, b)]
     ]
-    print(tabulate(results, headers="firstrow", tablefmt="grid"))
+    print tabulate(results, headers="firstrow", tablefmt="grid")
 
-def main() -> None:
+def main():
     a = 10
     b = 5
-    print(f"Performing calculations on {a} and {b}")
+    print "Performing calculations on {} and {}".format(a, b)
     try:
         display_results_as_table(a, b)
     except ValueError as e:
-        print(f"Error: {e}")
+        print "Error: {}".format(e)
 
 if __name__ == "__main__":
     main()
