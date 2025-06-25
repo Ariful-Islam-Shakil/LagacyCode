@@ -6,99 +6,146 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 from collections import Counter
-from StringIO import StringIO  # Python 2 only
+from io import StringIO  # Python 3 compatible StringIO
 
-def fetch_website_title(url):
-    """Get website title using requests + BeautifulSoup."""
+def fetch_website_title(url: str) -> str:
+    """Get website title using requests + BeautifulSoup.
+
+    Args:
+        url (str): URL of the website to fetch title from.
+
+    Returns:
+        str: Website title if found, 'No Title Found' otherwise.
+    """
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
     return soup.title.string if soup.title else 'No Title Found'
 
-def calculate_mean(arr):
-    """Calculate mean using numpy."""
+def calculate_mean(arr: np.ndarray) -> float:
+    """Calculate mean using numpy.
+
+    Args:
+        arr (np.ndarray): Input array.
+
+    Returns:
+        float: Mean value of the input array.
+    """
     return np.mean(arr)
 
-def create_dataframe():
-    """Create pandas DataFrame and check if 'score' column exists."""
+def create_dataframe() -> pd.DataFrame:
+    """Create pandas DataFrame and check if 'score' column exists.
+
+    Returns:
+        pd.DataFrame: DataFrame with 'name' and 'score' columns.
+    """
     data = {'name': ['Alice', 'Bob', 'Charlie'], 'score': [85, 90, 95]}
     df = pd.DataFrame(data)
     if 'score' in df.columns:
         return df
     return pd.DataFrame()
 
+def count_words(text: str) -> Counter:
+    """Count word frequency using collections.Counter.
 
-def count_words(text):
-    """Count word frequency using collections.Counter."""
+    Args:
+        text (str): Input text.
+
+    Returns:
+        Counter: Word frequency counter.
+    """
     words = text.lower().split()
     return Counter(words)
 
-def say_hello(name):
-    """Old-style string formatting for greeting."""
-    return "Hello, %s!" % name
+def say_hello(name: str) -> str:
+    """Greet the user with a personalized message.
 
-def generate_range(n):
-    """Generate squares using xrange (Python 2 only)."""
-    result = []
-    for i in xrange(n):
-        result.append(i * i)
-    return result
+    Args:
+        name (str): User's name.
 
-def string_io_example():
-    """StringIO example for string buffer (Python 2 only)."""
+    Returns:
+        str: Greeting message.
+    """
+    return f"Hello, {name}!"
+
+def generate_range(n: int) -> list[int]:
+    """Generate squares using a list comprehension.
+
+    Args:
+        n (int): Upper limit for the range.
+
+    Returns:
+        list[int]: List of squares from 0 to n-1.
+    """
+    return [i * i for i in range(n)]
+
+def string_io_example() -> str:
+    """StringIO example for string buffer.
+
+    Returns:
+        str: Content of the string buffer.
+    """
     buffer = StringIO()
     buffer.write("This is a string buffer.\n")
-    buffer.write("Works in Python 2.7 with StringIO module.\n")
+    buffer.write("Works in Python 3.12 with StringIO module.\n")
     content = buffer.getvalue()
     buffer.close()
     return content
 
-def dictionary_iteration():
-    """Iterate dictionary with iteritems() (Python 2 only)."""
-    d = {'a': 1, 'b': 2}
-    result = []
-    for k, v in d.iteritems():
-        result.append("%s => %d" % (k, v))
-    return result
+def dictionary_iteration(d: dict[str, int]) -> list[str]:
+    """Iterate dictionary with items().
 
-def exception_handling_demo():
-    """Python 2 style exception handling."""
+    Args:
+        d (dict[str, int]): Input dictionary.
+
+    Returns:
+        list[str]: List of key-value pairs as strings.
+    """
+    return [f"{k} => {v}" for k, v in d.items()]
+
+def exception_handling_demo() -> str:
+    """Demonstrate exception handling.
+
+    Returns:
+        str: Error message if division by zero occurs, otherwise the result.
+    """
     try:
         return 10 / 0
-    except ZeroDivisionError, e:
-        return "Caught an error: %s" % str(e)
+    except ZeroDivisionError as e:
+        return f"Caught an error: {str(e)}"
 
 # main.py
 
-def main():
-    print say_hello("Python 2.7 User")
+def main() -> None:
+    """Main function to test utility functions."""
+    print(say_hello("Python 3.12 User"))
 
     title = fetch_website_title("https://www.example.com")
-    print "Website Title:", title
+    print(f"Website Title: {title}")
 
     mean_val = calculate_mean([5, 15, 25])
-    print "Mean Value:", mean_val
+    print(f"Mean Value: {mean_val}")
 
     df = create_dataframe()
-    print "DataFrame:\n", df
+    print(f"DataFrame:\n{df}")
 
     # result = utils.plot_scores()
-    # print result
+    # print(result)
 
     text = "Python is fun and Python is powerful"
     word_count = count_words(text)
-    print "Word Counts:"
-    for word, count in word_count.iteritems():  # Python 2 style dictionary iteration
-        print "%s: %d" % (word, count)
+    print("Word Counts:")
+    for word, count in word_count.items():  # Python 3 style dictionary iteration
+        print(f"{word}: {count}")
 
-    print "Generated Range Squares:", generate_range(5)
+    print(f"Generated Range Squares: {generate_range(5)}")
 
-    print "StringIO Buffer Output:\n" + string_io_example()
+    print(f"StringIO Buffer Output:\n{string_io_example()}")
 
-    print "Dictionary Iteration Output:"
-    for line in dictionary_iteration():
-        print line
+    print("Dictionary Iteration Output:")
+    for line in dictionary_iteration({'a': 1, 'b': 2}):
+        print(line)
 
-    print "Exception Handling Test:", exception_handling_demo()
+    print(f"Exception Handling Test: {exception_handling_demo()}")
 
 if __name__ == '__main__':
     main()
