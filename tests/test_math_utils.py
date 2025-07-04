@@ -1,7 +1,13 @@
+import pytest
+from unittest.mock import MagicMock
 import utils.math_utils as mu
 
-def test_calculate_mean():
-    assert mu.calculate_mean([1, 2, 3]) == 2.0
+@pytest.mark.parametrize("numbers, expected", [
+    ([1, 2, 3], 2.0),
+    ([4, 5, 6], 5.0),
+])
+def test_calculate_mean(numbers, expected):
+    assert mu.calculate_mean(numbers) == expected
 
 def test_create_dataframe():
     df = mu.create_dataframe()
@@ -14,10 +20,12 @@ def test_generate_range():
 def test_exception_handling_demo():
     assert "Caught an error" in mu.exception_handling_demo()
 
-def test_fetch_website_title(monkeypatch):
+@pytest.mark.parametrize("url, expected", [
+    ("any", "Example"),
+])
+def test_fetch_website_title(url, expected, monkeypatch):
     class MockResponse:
         text = "<html><head><title>Example</title></head></html>"
-    def mock_get(url):
-        return MockResponse()
+    mock_get = MagicMock(return_value=MockResponse())
     monkeypatch.setattr(mu.requests, "get", mock_get)
-    assert mu.fetch_website_title("any") == "Example"
+    assert mu.fetch_website_title(url) == expected
